@@ -117,6 +117,8 @@ bool DistanceMatrix(int** input_adjacency, int** output_distance, int vertices){
 }
 
 
+//Return the diameter of the graph if all vertices are connect, -1 otherwise
+//Diameter is the max distance between 2 vertices
 int Diameter(int** adjacency_matrix, int vertices){
   int** distance = createTable(vertices, vertices);
   bool connected;
