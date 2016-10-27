@@ -1,3 +1,24 @@
+/*****************************************************************************
+GRAPH OPERATION PROGRAM
+INPUT: a graph in the format 'V x1 x2 x3 x4 .. xn -1'
+  with V is the number of vertices of the GRAPH
+  with x1 x2, x3 x4,... are edges, n must be even
+OPERATION:
+  get ajacency matrix
+  BFS with a specific root
+  get distance matrix and determine whether the graph is connected
+  get diameter if the graph is connected
+  get groups of connected vertices
+OUTPUT
+  number of edges
+  matrix of edges
+  adjacency matrix
+  diameter
+  number of groups (connected vertices)
+  vertices of each group
+******************************************************************************/
+
+
 #include <iostream>
 #include <stdio.h>
 #include <cstdlib>
@@ -184,7 +205,6 @@ void Components(int** adjacency_matrix, int vertices){
         }
         cout << endl;
     }
-    component.~vector();  //delete vector
   }
   freeTable(distance, vertices); //delete distance matrix
 }
@@ -196,10 +216,11 @@ int main(){
 
 	// print instructions
 	cout << "Please enter a graph!\n";
-	cout << "starting with the number of vertices,\n";
+	cout << "Starting with the number of vertices,\n";
 	cout << "which followed by vertex numbers that are connected in pairs,\n";
 	cout << "and terminating with -1.\n";
 	cout << "There must be a space between 2 adjacent numbers.\n";
+  cout << ">";
 
 	getline(cin, input);  // store input in tmp
 	stringstream ss(input);
