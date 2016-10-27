@@ -227,7 +227,7 @@ int main(){
 	int ti;
 	ss >> ti;
 	cout << ti << endl;
-	V = ti; //Entered at the beginning of the stream
+	V = ti; //Get number of vertices Entered at the beginning of the string
 	while(ss >> ti && ti != -1){
 		nums.push_back(ti);
 	}
