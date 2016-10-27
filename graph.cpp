@@ -182,8 +182,9 @@ void Components(int** adjacency_matrix, int vertices){
         }
         cout << endl;
     }
+    component.~vector();  //delete vector
   }
-  freeTable(distance, vertices);
+  freeTable(distance, vertices); //delete distance matrix
 }
 
 int main(){
@@ -218,8 +219,10 @@ int main(){
 	    edges[i][1] = nums[2*i+1];
 	}
 
+  nums.~vector(); //destroy input vector
+  // print the array of connected pairs
   cout << "This is the pairs of the graph\n";
-  printTable(edges, num_of_edges, 2); // print the array of connected pairs
+  printTable(edges, num_of_edges, 2);
 
 	//create the table of adjacency matrix
   int** G = createTable(V, V);
@@ -232,7 +235,7 @@ int main(){
 
   Components(G, V);
 
-  //free pointers memory
+  //delete matrices
   freeTable(G, V);
   freeTable(edges, 2);
 
