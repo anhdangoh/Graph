@@ -24,54 +24,12 @@ OUTPUT
 #include <cstdlib>
 #include <queue>
 #include <vector>
-#include <sstream>
-#include <string>
-
+#include "../lib/table.h"
 using namespace std;
-
-//Create a 2 dimensional table which is a pointer to an array of pointers
-//each pointing to an array of each row
-int** createTable(int rows, int columns){
-  //get the return pointer pointing to a new array of pointers with rows elements
-  int** table = new int*[rows];
-  for (int i = 0; i < rows; i++) {
-    //get each pointer of the array pointing to a new array of columns elements
-    table[i] = new int[columns];
-  }
-  return table;
-}
-
-
-//Delete table
-void freeTable(int** table, int rows){
-  if (table){
-    for (int i = 0; i < rows; i++){
-      if (table[i]){
-        delete[] table[i];
-        table[i] = NULL;
-      }
-    }
-  }
-  delete table;
-  table = NULL;
-}
-
-
-//Print table
-void printTable(int** table, int rows, int columns){
-  for (int i = 0; i < rows; i++){
-    for (int j = 0; j < columns; j++){
-      printf("%d\t", table[i][j]);
-    }
-    cout << "\n";
-  }
-  cout << endl;
-}
-
 
 //Return the Adjacency matrix of the Graph, taking inputs of the matrix of pairs
 //the no of vertices and no of edges
-int** adjacencyMatrix(int** edges, int vertices, int num_of_edges){
+int** graph::adjacencyMatrix(int** edges, int vertices, int num_of_edges){
   int** matrix = createTable(vertices, vertices); //create the return matrix as a pointer to 2 dimensional array
   for (int i = 0; i < num_of_edges; i++){ //scan all the pairs and set matrix[i,j] and [j,i] = 1 with each (i,j) pair
     matrix[edges[i][0]][edges[i][1]] = 1;
@@ -82,7 +40,7 @@ int** adjacencyMatrix(int** edges, int vertices, int num_of_edges){
 
 
 //Return an array of distance to the given root using BFS algorithm
-int* BFS(int** adjacency_matrix, int vertices, int root){
+int* graph::BFS(int** adjacency_matrix, int vertices, int root){
   int* distance_to_root = new int[vertices]; //create the return array
   for (int k = 0; k < vertices; k++){
     distance_to_root[k] = 0;
@@ -115,7 +73,7 @@ int* BFS(int** adjacency_matrix, int vertices, int root){
 
 //Return a distance matrix of all nodes by applying BFS with every node as root
 //Return true if the graph is connected and otherwise
-bool DistanceMatrix(int** input_adjacency, int** output_distance, int vertices){
+bool graph::DistanceMatrix(int** input_adjacency, int** output_distance, int vertices){
   bool connected = true;
   for (int i = 0; i < vertices; i++){
     output_distance[i] = BFS(input_adjacency, vertices, i);
@@ -140,7 +98,7 @@ bool DistanceMatrix(int** input_adjacency, int** output_distance, int vertices){
 
 //Return the diameter of the graph if all vertices are connect, -1 otherwise
 //Diameter is the max distance between 2 vertices
-int Diameter(int** adjacency_matrix, int vertices){
+int graph::Diameter(int** adjacency_matrix, int vertices){
   int** distance = createTable(vertices, vertices);
   bool connected;
   connected = DistanceMatrix(adjacency_matrix, distance, vertices);
@@ -163,7 +121,7 @@ int Diameter(int** adjacency_matrix, int vertices){
 
 
 //Find all vertices that are connected
-void Components(int** adjacency_matrix, int vertices){
+void graph::Components(int** adjacency_matrix, int vertices){
   int** distance = createTable(vertices, vertices);
   bool connected = false;
   //create a distance matrix by passing an empty one to DistanceMatrix
@@ -207,70 +165,4 @@ void Components(int** adjacency_matrix, int vertices){
     }
   }
   freeTable(distance, vertices); //delete distance matrix
-}
-
-int main(){
-	int V;	//number of vertices
-	string input;  //variable to store 1 line of input as a string
-	vector<int> nums; //vector to store input as separate integers
-
-	// print instructions
-	cout << "Please enter a graph!\n";
-	cout << "Starting with the number of vertices,\n";
-	cout << "which followed by vertex numbers that are connected in pairs,\n";
-	cout << "and terminating with -1.\n";
-	cout << "There must be a space between 2 adjacent numbers.\n";
-  cout << ">";
-
-	getline(cin, input);  // store input in tmp
-	stringstream ss(input);
-	int ti;
-	ss >> ti;
-	cout << ti << endl;
-	V = ti; //Get number of vertices Entered at the beginning of the string
-	while(ss >> ti && ti != -1){
-		nums.push_back(ti);
-	}
-
-	int num_of_edges = nums.size()/2; // get no of edges
-    cout << "Number of edges: " << num_of_edges << endl;
-
-    //Create the table of edges
-	int** edges = createTable(num_of_edges,2);
-	for (int i = 0; i < num_of_edges; i++){
-	    edges[i][0] = nums[2*i];
-	    edges[i][1] = nums[2*i+1];
-	}
-
-  nums.~vector(); //destroy input vector
-  // print the array of connected pairs
-  cout << "This is the pairs of the graph\n";
-  printTable(edges, num_of_edges, 2);
-
-	//create the table of adjacency matrix
-  int** G = createTable(V, V);
-  G = adjacencyMatrix(edges, V, num_of_edges);
-
-  //Output the results
-  cout << "This is the adjacency matrix of the graph\n";
-  printTable(G, V, V); // print the adjacency matrix
-  cout << "The diameter of the graph is " << Diameter(G, V) << endl;
-
-  Components(G, V);
-
-  //delete matrices
-  freeTable(G, V);
-  freeTable(edges, 2);
-
-  /* To test functions in the middle
-  int** distance = createTable(V, V);
-  cout << "Connected: " << DistanceMatrix(G, distance, V) << endl;
-  printTable(distance, V, V);
-
-
-  freeTable(search, 1);
-  freeTable(edges, num_of_edges);
-  */
-
-  return 0;
 }
