@@ -1,4 +1,9 @@
 /*****************************************************************************
+ASSIGNMENT 3
+GROUP : 20
+MEMBERS: DANG, LENNON, PHILIPS
+
+
 GRAPH OPERATION PROGRAM
 INPUT: a graph in the format 'V x1 x2 x3 x4 .. xn -1'
   with V is the number of vertices of the GRAPH
@@ -168,7 +173,8 @@ void Components(int** adjacency_matrix, int vertices){
   bool connected = false;
   //create a distance matrix by passing an empty one to DistanceMatrix
   connected = DistanceMatrix(adjacency_matrix, distance, vertices);
-
+  cout << "This is the distance matrix: " << endl;
+  printTable(distance, vertices, vertices);
   if (connected){
     cout << "All vertices are connected\n";
   }else{
@@ -219,6 +225,7 @@ int main(){
 	cout << "Starting with the number of vertices,\n";
 	cout << "which followed by vertex numbers that are connected in pairs,\n";
 	cout << "and terminating with -1.\n";
+  cout << "Vertex numbering must start from 0 and in order without jumping.\n";
 	cout << "There must be a space between 2 adjacent numbers.\n";
   cout << ">";
 
@@ -226,7 +233,6 @@ int main(){
 	stringstream ss(input);
 	int ti;
 	ss >> ti;
-	cout << ti << endl;
 	V = ti; //Get number of vertices Entered at the beginning of the string
 	while(ss >> ti && ti != -1){
 		nums.push_back(ti);
@@ -254,11 +260,15 @@ int main(){
   //Output the results
   cout << "This is the adjacency matrix of the graph\n";
   printTable(G, V, V); // print the adjacency matrix
-  cout << "The diameter of the graph is " << Diameter(G, V) << endl;
+
+  int diameter = Diameter(G, V);
+  if (diameter!=-1){
+    cout << "The diameter of the graph is: " << diameter << endl;
+  }
 
   Components(G, V);
 
-  
+
   //delete matrices
   freeTable(G, V);
   freeTable(edges, 2);
